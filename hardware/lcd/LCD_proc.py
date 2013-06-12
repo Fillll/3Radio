@@ -34,7 +34,7 @@ def print_line(text, lcd, line_style, counter):
     if len(text_1) < lcd.LCD_WIDTH:
             print_1 = text_1
     else:
-        if counter_1 = len(text_1)-lcd.LCD_WIDTH+1:
+        if counter_1 == len(text_1)-lcd.LCD_WIDTH+1:
             counter_1 = 1
         to_print = text[counter:]
         counter += 1
