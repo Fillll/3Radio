@@ -86,10 +86,14 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5, delay=0.5):
         line_style_3 = 'line3_%s' % style_3
         line_style_4 = 'line4_%s' % style_4
 
-        counter_1 = print_line(text_1, lcd, line_style_1, counter_1, white)
-        counter_2 = print_line(text_2, lcd, line_style_2, counter_2, white)
-        counter_3 = print_line(text_3, lcd, line_style_3, counter_3, white)
-        counter_4 = print_line(text_4, lcd, line_style_4, counter_4, white)
+        while True:
+            counter_1 = print_line(text_1, lcd, line_style_1, counter_1, white)
+            counter_2 = print_line(text_2, lcd, line_style_2, counter_2, white)
+            counter_3 = print_line(text_3, lcd, line_style_3, counter_3, white)
+            counter_4 = print_line(text_4, lcd, line_style_4, counter_4, white)
+
+            if (not q1.empty()) or (not q2.empty()) or (not q3.empty()) or (not q4.empty()):
+                break
 
         time.sleep(delay)
 
