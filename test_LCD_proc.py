@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 from multiprocessing import Process, Queue
-from ..hardware.lcd import LCD_proc
+from hardware.lcd import LCD_proc
 import random
 import time
 
