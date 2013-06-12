@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-from collections import deque
 from multiprocessing import Process, Queue
 from ..hardware.lcd import LCD_proc
 import random
 import time
 
-if __name__ == '__main__':
+
+def test_LCD_proc():
     q1 = Queue()
     q2 = Queue()
     q3 = Queue()
@@ -31,3 +31,7 @@ if __name__ == '__main__':
 
     time.sleep(2)
     q1.put('End...')
+
+
+if __name__ == '__main__':
+    pass
