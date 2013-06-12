@@ -82,7 +82,7 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5):
         counter_1 = print_line(text_1, lcd, line_style_1, counter_1, white)
         counter_2 = print_line(text_2, lcd, line_style_2, counter_2, white)
         counter_3 = print_line(text_3, lcd, line_style_3, counter_3, white)
-        counter_4 = print_line(text_4, lcd, line_style_4, counter_4, whtie)
+        counter_4 = print_line(text_4, lcd, line_style_4, counter_4, white)
 
         time.sleep(0.5)
 
