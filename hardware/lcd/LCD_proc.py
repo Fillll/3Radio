@@ -84,6 +84,8 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5):
         counter_3 = print_line(text_3, lcd, line_style_3, counter_3)
         counter_4 = print_line(text_4, lcd, line_style_4, counter_4)
 
+        time.sleep(0.5)
+
 
 # def LCD_line_runner(queue, lcd, line=None):
 #     if line == None:
