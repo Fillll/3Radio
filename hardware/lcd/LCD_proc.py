@@ -5,6 +5,10 @@ import time
 from multiprocessing import Process
 
 
+class LCDException(Exception):
+    pass
+
+
 def LCD_runner(q1, q2, q3, q4):
     '''
     Run process for all 4 lines
@@ -23,8 +27,9 @@ def get_text_from(q, counter):
     while q.empty() == False:
         message = q.get_nowait()
 
-    if message == None:
-        message = {'text':'XM...', 'style':'center'}
+    if isinstance(message, dict):
+        raise LCDException('LCD_Proc: unexpected message type error.')
+        
     return message, 0
 
 
@@ -33,10 +38,12 @@ def change_text_and_style(message, text, style):
         return text, style
     if style in ['center', 'time_temp']:
         return message['text'], message['style']
+    else:
+        raise LCDException('LCD_Proc: unexpected style error.')
 
 
 def print_line(text, lcd, line_style, counter, white):
-    if len(text) < lcd.LCD_WIDTH:
+    if len(text) <= lcd.LCD_WIDTH:
         to_print = text
     else:
         text = '%s%s%s' % (white, text, white)
@@ -50,7 +57,7 @@ def print_line(text, lcd, line_style, counter, white):
     return counter
 
 
-def LCD_worker(q1, q2, q3, q4, lcd, white=5):
+def LCD_worker(q1, q2, q3, q4, lcd, white=5, delay=0.5):
     """
     """
 
@@ -84,7 +91,7 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5):
         counter_3 = print_line(text_3, lcd, line_style_3, counter_3, white)
         counter_4 = print_line(text_4, lcd, line_style_4, counter_4, white)
 
-        time.sleep(0.5)
+        time.sleep(delay)
 
 
 if __name__ == '__main__':
