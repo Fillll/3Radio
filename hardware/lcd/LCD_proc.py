@@ -36,11 +36,11 @@ def change_text_and_style(message, text, style):
 
 
 def print_line(text, lcd, line_style, counter):
-    if len(text_1) < lcd.LCD_WIDTH:
-            print_1 = text_1
+    if len(text) < lcd.LCD_WIDTH:
+        to_print = text
     else:
-        if counter_1 == len(text_1)-lcd.LCD_WIDTH+1:
-            counter_1 = 1
+        if counter == len(text)-lcd.LCD_WIDTH+1:
+            counter = 1
         to_print = text[counter:]
         counter += 1
 
