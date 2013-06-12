@@ -18,8 +18,13 @@ def LCD_runner(q1, q2, q3, q4):
 def get_text_from(q, counter):
     if q.empty():
         return None, counter
+
+    message = None
     while not q.empty:
         message = q.get()
+
+    if message == None:
+        message = {'text':'XM...', 'style':'center'}
     return message, 0
 
 
