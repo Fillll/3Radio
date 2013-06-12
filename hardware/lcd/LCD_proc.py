@@ -20,7 +20,7 @@ def get_text_from(q, counter):
         return None, counter
 
     message = None
-    while q.empty == False:
+    while q.empty() == False:
         print 'take one!'
         message = q.get_nowait()
 
