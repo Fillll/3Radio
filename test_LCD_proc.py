@@ -24,6 +24,9 @@ def test_LCD_proc():
     print 'TEST 2'
 
     q3.put({'text':'12345678901234567890 and now other words. !@# :) ;)', 'style':'center'})
+    time.sleep(1)
+    q3.put({'text':'12345678901234567890 :) ;)', 'style':'center'})
+
 
     time.sleep(2)
     q1.put({"text":'End...','style':'center'})
