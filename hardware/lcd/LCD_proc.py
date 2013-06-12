@@ -22,7 +22,7 @@ def get_text_from(q, counter):
     message = None
     while q.empty == False:
         print 'take one!'
-        message = q.get()
+        message = q.get_nowait()
 
     if message == None:
         message = {'text':'XM...', 'style':'center'}
