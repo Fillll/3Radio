@@ -20,7 +20,8 @@ def get_text_from(q, counter):
         return None, counter
 
     message = None
-    while not q.empty:
+    while q.empty == False:
+        print 'take one!'
         message = q.get()
 
     if message == None:
