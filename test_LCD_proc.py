@@ -32,7 +32,7 @@ def test_LCD_proc():
     q1.put({"text":'End...','style':'center'})
 
     while True:
-        text = raw_input('Line1: ')
+        text = raw_input('Line1: \n')
         q1.put({'text':text, 'style':'center'})
 
 

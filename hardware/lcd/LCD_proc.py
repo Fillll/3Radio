@@ -36,7 +36,7 @@ def get_text_from(q, counter):
 def change_text_and_style(message, text, style):
     if message is None:
         return text, style
-    if style in ['center', 'time_temp']:
+    if message['style'] in ['center', 'time_temp']:
         return message['text'], message['style']
     else:
         raise LCDException('LCD_Proc: unexpected style error.')
