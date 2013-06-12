@@ -36,7 +36,7 @@ def get_text_from(q, counter):
 def change_text_and_style(message, text, style):
     if message is None:
         return text, style
-    if message['style'] in ['center', 'time_temp']:
+    elif message['style'] in ['center', 'time_temp']:
         return message['text'], message['style']
     else:
         raise LCDException('LCD_Proc: unexpected style error.')
@@ -60,14 +60,10 @@ def print_line(text, lcd, line_style, counter, white):
 def LCD_worker(q1, q2, q3, q4, lcd, white=5, delay=0.5):
     """
     """
-
     # Whiting length
     white = ' '*white
-
     counter_1 = counter_2 = counter_3 = counter_4 = 0
-
     text_1 = text_2 = text_3 = text_4 = '0'
-
     style_1 = style_2 = style_3 = style_4 = 'center'
 
     while True:
