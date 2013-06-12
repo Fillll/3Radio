@@ -34,4 +34,4 @@ def test_LCD_proc():
 
 
 if __name__ == '__main__':
-    pass
+    test_LCD_proc()
