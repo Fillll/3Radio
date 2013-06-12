@@ -23,17 +23,10 @@ def test_LCD_proc():
     q1.put({"text":'Hi!','style':'center'})
     print 'TEST 2'
 
-    for counter in range(4):
-        time.sleep(4)
-        i = random.randint(1,100)
-        print str(i)
-        q1.put({"text":str(i),'style':'center'})
-        q2.put({"text":str(i),'style':'center'})
-        q3.put({"text":str(i),'style':'center'})
-        q4.put({"text":str(i),'style':'center'})
+    q3.put({'text':'12345678901234567890 and now other words. !@# :) ;)', 'style':'center'})
 
     time.sleep(2)
-    q1.put('End...')
+    q1.put({"text":'End...','style':'center'})
 
 
 if __name__ == '__main__':
