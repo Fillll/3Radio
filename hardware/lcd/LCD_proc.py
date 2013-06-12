@@ -28,7 +28,7 @@ def get_text_from(q, counter):
     return message, 0
 
 
-def change_text_and_style(message, text, line_style, counter):
+def change_text_and_style(message, text, line_style):
     if message is None:
         return text, style
     if style in ['center', 'time_temp']:
