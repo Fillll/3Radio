@@ -27,7 +27,7 @@ def get_text_from(q, counter):
     while q.empty() == False:
         message = q.get_nowait()
 
-    if isinstance(message, dict):
+    if not isinstance(message, dict):
         raise LCDException('LCD_Proc: unexpected message type error.')
         
     return message, 0
