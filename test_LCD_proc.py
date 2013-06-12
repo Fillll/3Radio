@@ -31,6 +31,10 @@ def test_LCD_proc():
     time.sleep(2)
     q1.put({"text":'End...','style':'center'})
 
+    while True:
+        text = raw_input('Line1: ')
+        q1.put({'text':text, 'style':'center'})
+
 
 if __name__ == '__main__':
     test_LCD_proc()

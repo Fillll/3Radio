@@ -15,7 +15,7 @@ class LCD20x4(object):
         self.LCD_D5 = LCD_D5
         self.LCD_D6 = LCD_D6
         self.LCD_D7 = LCD_D7
-        self.LED_ON = LED_ON
+        self.LED_ON = LED_ON # Think on this pin! Do you need it?
 
         # Define some device constants
         self.LCD_WIDTH = 20 # Maximum characters per line
