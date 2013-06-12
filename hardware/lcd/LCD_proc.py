@@ -56,10 +56,11 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5):
     # Whiting length
     white = ' '*white
 
-    counter_1 = 0
-    counter_2 = 0
-    counter_3 = 0
-    counter_4 = 0
+    counter_1 = counter_2 = counter_3 = counter_4 = 0
+
+    text_1 = text_2 = text_3 = text_4 = '0'
+
+    style_1 = style_2 = style_3 = style_4 = 'center'
 
     while True:
         new_message_1, counter_1 = get_text_from(q1, counter_1)
