@@ -95,7 +95,7 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5, delay=0.5):
             if (not q1.empty()) or (not q2.empty()) or (not q3.empty()) or (not q4.empty()):
                 break
 
-        time.sleep(delay)
+            time.sleep(delay)
 
 
 if __name__ == '__main__':
