@@ -7,7 +7,7 @@ from multiprocessing import Process
 
 def LCD_runner(q1, q2, q3, q4):
     '''
-    Run proces for all 4 lines
+    Run process for all 4 lines
     '''
     my_lcd = LCD.LCD20x4(26, 24, 22, 18, 16, 12, 10)
 
@@ -21,7 +21,6 @@ def get_text_from(q, counter):
 
     message = None
     while q.empty() == False:
-        print 'take one!'
         message = q.get_nowait()
 
     if message == None:
@@ -36,10 +35,11 @@ def change_text_and_style(message, text, style):
         return message['text'], message['style']
 
 
-def print_line(text, lcd, line_style, counter):
+def print_line(text, lcd, line_style, counter, white):
     if len(text) < lcd.LCD_WIDTH:
         to_print = text
     else:
+        text = '%s%s%s' % (white, text, white)
         if counter == len(text)-lcd.LCD_WIDTH+1:
             counter = 1
         to_print = text[counter:]
@@ -79,10 +79,10 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5):
         line_style_3 = 'line3_%s' % style_3
         line_style_4 = 'line4_%s' % style_4
 
-        counter_1 = print_line(text_1, lcd, line_style_1, counter_1)
-        counter_2 = print_line(text_2, lcd, line_style_2, counter_2)
-        counter_3 = print_line(text_3, lcd, line_style_3, counter_3)
-        counter_4 = print_line(text_4, lcd, line_style_4, counter_4)
+        counter_1 = print_line(text_1, lcd, line_style_1, counter_1, white)
+        counter_2 = print_line(text_2, lcd, line_style_2, counter_2, white)
+        counter_3 = print_line(text_3, lcd, line_style_3, counter_3, white)
+        counter_4 = print_line(text_4, lcd, line_style_4, counter_4, whtie)
 
         time.sleep(0.5)
 
