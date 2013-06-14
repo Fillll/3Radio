@@ -72,8 +72,9 @@ def LCD_worker(q1, q2, q3, q4, lcd, white=5, delay=0.5):
         new_message_3, counter_3 = get_text_from(q3, counter_3)
         new_message_4, counter_4 = get_text_from(q4, counter_4)
 
-        if 'stop' in new_message_4:
-            break
+        if isinstance(new_message_4, dict):
+            if 'stop' in new_message_4:
+                break
 
         text_1, style_1 = change_text_and_style(new_message_1, text_1, style_1)
         text_2, style_2 = change_text_and_style(new_message_2, text_2, style_2)
