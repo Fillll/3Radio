@@ -1,19 +1,8 @@
-# Sample code for both the RotaryEncoder class and the Switch class.
-# The common pin for the encoder should be wired to ground.
-# The sw_pin should be shorted to ground by the switch.
+# encoding:utf-8
 
-# Output looks like this:
-#
-#    A B STATE SEQ DELTA SWITCH
-#    1 1   3    2    1    0
-#    0 1   2    3    1    0
-#    0 0   0    0    1    0
-#    1 0   1    1    1    0
-#    1 1   3    2    1    0
-#    0 1   2    3    1    0
 
-import gaugette.rotary_encoder
-import gaugette.switch
+from hardware.rotary.RotaryEncoder import RotaryEncoder
+#import gaugette.switch ## TODO: switch
 import math
 import time
 
@@ -53,11 +42,6 @@ while True:
         last_switch_state = switch_state
         last_state = state
 
-        # print a heading every 20 lines
-        # if last_heading % 20 == 0:
-        #     print "A B STATE SEQ DELTA SWITCH"
-        # last_heading += 1
-
         # extract individual signal bits for A and B
         a_state = state & 0x01
         b_state = (state & 0x02) >> 1
@@ -82,7 +66,6 @@ while True:
 
         nothing_happens += 1
 
-        # print '%1d %1d %3d %4d %4d %4d' % (a_state, b_state, state, sequence, delta, switch_state)
         total_delta += delta
 
         if (total_delta % 4 == 0) and (total_delta != 0):
@@ -93,7 +76,7 @@ while True:
     else:
         nothing_happens += 1
     
-    if   nothing_happens == 1000:
+    if nothing_happens == 1000:
         interval = 0.01
     elif nothing_happens == 100000:
         interval = 0.1
