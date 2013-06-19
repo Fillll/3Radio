@@ -8,12 +8,12 @@ from multiprocessing import Queue
 def main():
     q = Queue()
 
-    RotaryEncoder_proc.RE_runner(q, 7, 9, 8)
+    RotaryEncoder_proc.RE_runner(q, 7, 9, 8, 1)
 
     while True:
         result = q.get(block=True)
         if 'rot' in result:
-            print result['rot']
+            print '%s: %s' % (str(result['name']), str(result['rot']))
         elif 'button' in result:
             pass
         else:
