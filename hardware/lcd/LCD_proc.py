@@ -37,7 +37,7 @@ def change_text_and_style(message, text, style):
     if message is None:
         return text, style
     elif message['style'] in ['center', 'time_temp']:
-        return message['text'], message['style']
+        return str(message['text']), message['style']
     else:
         raise LCDException('LCD_Proc: unexpected style error.')
 

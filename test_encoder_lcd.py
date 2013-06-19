@@ -1,7 +1,8 @@
 # encoding:utf-8
 
 
-from hardware.rotary.RotaryEncoder import RotaryEncoder_proc, REException
+from hardware.rotary import RotaryEncoder_proc
+from hardware.rotary.RotaryEncoder_proc import REException
 from hardware.lcd import LCD_proc
 from multiprocessing import Queue
 
@@ -13,10 +14,10 @@ def main():
     line_4 = Queue()
     encoders = Queue()
 
-    line_1.put('text':'', 'style':'center')
-    line_2.put('text':'', 'style':'center')
-    line_3.put('text':'', 'style':'center')
-    line_4.put('text':'', 'style':'center')
+    line_1.put({'text':'', 'style':'center'})
+    line_2.put({'text':'', 'style':'center'})
+    line_3.put({'text':'', 'style':'center'})
+    line_4.put({'text':'', 'style':'center'})
 
     RotaryEncoder_proc.RE_runner(encoders, 1, 7, 9, 8)
     # RotaryEncoder_proc.RE_runner(encoders, 2, x, y, z)
