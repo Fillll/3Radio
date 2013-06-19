@@ -13,16 +13,18 @@ class REException(Exception):
 
 def RE_runner(q, name, pin_a, pin_b, button_pin):
     my_RE = RotaryEncoder.RotaryEncoder(pin_a, pin_b)
-    my_button = switch.Switch(button_pin)
+    my_button = Switch.Switch(button_pin)
 
-    p = Process(target=RE_worker, args=(1, my_RE, name, my_button))
+    p = Process(target=RE_worker, args=(q, my_RE, name, my_button))
     p.start()
 
 def RE_worker(q, encoder, name, switcher):
+    nothing_happens = 0
+    interval = 0
     total_delta = 0
     last_state = 0
     while True:
-        delta = encoder.delta() # returns 0,1,or -1
+        delta = encoder.get_delta() # returns 0,1,or -1
         state = switcher.get_state()
         if (delta != 0) or (state != last_state):
             total_delta += delta
