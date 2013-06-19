@@ -10,20 +10,20 @@ class REException(Exception):
     pass
 
 
-def RE_runner(q, pin_a, pin_b, button_pin):
+def RE_runner(q, name, pin_a, pin_b, button_pin):
     my_RE = RotaryEncoder.RotaryEncoder(pin_a, pin_b)
 
-    p = Process(target=RE_worker, args=(1, my_RE))
+    p = Process(target=RE_worker, args=(1, my_RE, name))
     p.start()
 
-def RE_worker(q, encoder):
+def RE_worker(q, encoder, name):
     total_delta = 0
     while True:
         delta = encoder.delta() # returns 0,1,or -1
         if delta!=0:
             total_delta += delta
             if (total_delta % 4 == 0) and (total_delta != 0):
-                q.put({'rot':total_delta/4})
+                q.put({'rot':total_delta/4, 'name':name})
                 total_delta = 0
             interval = 0.001
             nothing_happens = 0
