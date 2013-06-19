@@ -17,6 +17,7 @@ def RE_runner(q, name, pin_a, pin_b, button_pin):
 
     p = Process(target=RE_worker, args=(q, my_RE, name, my_button))
     p.start()
+    return p
 
 def RE_worker(q, encoder, name, switcher):
     nothing_happens = 0

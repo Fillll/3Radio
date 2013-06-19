@@ -17,6 +17,7 @@ def LCD_runner(q1, q2, q3, q4):
 
     p = Process(target=LCD_worker, args=(q1, q2, q3, q4, my_lcd))
     p.start()
+    return p
 
 
 def get_text_from(q, counter):
