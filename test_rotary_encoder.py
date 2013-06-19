@@ -15,7 +15,7 @@ def main():
         if 'rot' in result:
             print '%s: %s' % (str(result['name']), str(result['rot']))
         elif 'button' in result:
-            pass
+            print '%s: %s' % (str(result['name']), str(result['button']))
         else:
             raise REException('Unexpected message.')
 
