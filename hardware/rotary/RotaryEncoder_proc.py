@@ -10,8 +10,8 @@ class REException(Exception):
     pass
 
 
-def RE_runner(q):
-    my_RE = RotaryEncoder.RotaryEncoder(7, 9)
+def RE_runner(q, pin_a, pin_b, button_pin):
+    my_RE = RotaryEncoder.RotaryEncoder(pin_a, pin_b)
 
     p = Process(target=RE_worker, args=(1, my_RE))
     p.start()
