@@ -24,7 +24,7 @@ def get_text_from(q, counter):
         return None, counter
 
     message = None
-    while q.empty() == False:
+    while not q.empty():
         message = q.get_nowait()
 
     if not isinstance(message, dict):
