@@ -29,14 +29,29 @@ def main():
     while True:
         encoder_message = encoders.get(block=True)
         if encoder_message['name'] == 1:
-            sum_1 += encoder_message['rot']
-            line_1.put({'text':sum_1, 'style':'center'})
+            if 'rot' in encoder_message:
+                sum_1 += encoder_message['rot']
+                line_1.put({'text':sum_1, 'style':'center'})
+            elif 'button' in encoder_message:
+                line_1.put({'text':'button is pressed', 'style':'center'})
+            else:
+                raise REException('Unexpected RE behavior.')
         elif encoder_message['name'] == 2:
-            sum_2 += encoder_message['rot']
-            line_2.put({'text':sum_2, 'style':'center'})
+            if 'rot' in encoder_message:
+                sum_2 += encoder_message['rot']
+                line_2.put({'text':sum_2, 'style':'center'})
+            elif 'button' in encoder_message:
+                line_2.put({'text':'button is pressed', 'style':'center'})
+            else:
+                raise REException('Unexpected RE behavior.')
         elif encoder_message['name'] == 3:
-            sum_3 += encoder_message['rot']
-            line_3.put({'text':sum_3, 'style':'center'})
+            if 'rot' in encoder_message:
+                sum_3 += encoder_message['rot']
+                line_3.put({'text':sum_3, 'style':'center'})
+            elif 'button' in encoder_message:
+                line_3.put({'text':'button is pressed', 'style':'center'})
+            else:
+                raise REException('Unexpected RE behavior.')
         else:
             raise REException('Unexpected encoder name.')
 
