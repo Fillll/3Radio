@@ -1,7 +1,12 @@
 # encoding:utf-8
 
+
+# Bad-quality fork from
+# http://www.raspberrypi-spy.co.uk/2012/08/20x4-lcd-module-control-using-python/
+
 import RPi.GPIO as GPIO
 import time
+
 
 class LCD20x4(object):
     '''
