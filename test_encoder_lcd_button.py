@@ -38,7 +38,7 @@ def main():
     line_4.put({'text':'', 'style':'center'})
 
     print 'RE#1'
-    pe1 = RotaryEncoder_proc.RE_runner(encoders, 1, 7, 9, 8)
+    pe1 = RotaryEncoder_proc.RE_runner(encoders, 1, 8, 9, 7)
     print 'RE#2'
     pe2 = RotaryEncoder_proc.RE_runner(encoders, 2, 0, 2, 3)
     print 'RE#3'

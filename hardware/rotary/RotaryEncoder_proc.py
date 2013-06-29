@@ -30,11 +30,11 @@ def RE_worker(q, encoder, name, switcher):
         if (delta != 0) or (state != last_state):
             total_delta += delta
             if (total_delta % 4 == 0) and (total_delta != 0):
-                q.put({'rot':total_delta/4, 'name':name})
+                q.put({'rot': total_delta/4, 'name': name, 'dev': 're'})
                 total_delta = 0
             if state != last_state:
                 last_state = state
-                q.put({'button':state, 'name':name})
+                q.put({'button': state, 'name': name, 'dev': 're'})
             interval = 0.001
             nothing_happens = 0
         else:
