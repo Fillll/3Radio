@@ -36,21 +36,18 @@ class LCD20x4(object):
         self.E_PULSE = 0.00005
         self.E_DELAY = 0.00005
 
-
-
         self.start_LCD()
 
     def start_LCD(self):
         GPIO.setmode(GPIO.BOARD)
 
-        GPIO.setup(self.LCD_E, GPIO.OUT)  # E
-        GPIO.setup(self.LCD_RS, GPIO.OUT) # RS
-        GPIO.setup(self.LCD_D4, GPIO.OUT) # DB4
-        GPIO.setup(self.LCD_D5, GPIO.OUT) # DB5
-        GPIO.setup(self.LCD_D6, GPIO.OUT) # DB6
-        GPIO.setup(self.LCD_D7, GPIO.OUT) # DB7
-        GPIO.setup(self.LED_ON, GPIO.OUT) # Backlight enable
-
+        GPIO.setup(self.LCD_E, GPIO.OUT)   # E
+        GPIO.setup(self.LCD_RS, GPIO.OUT)  # RS
+        GPIO.setup(self.LCD_D4, GPIO.OUT)  # DB4
+        GPIO.setup(self.LCD_D5, GPIO.OUT)  # DB5
+        GPIO.setup(self.LCD_D6, GPIO.OUT)  # DB6
+        GPIO.setup(self.LCD_D7, GPIO.OUT)  # DB7
+        GPIO.setup(self.LED_ON, GPIO.OUT)  # Backlight enable
 
         # Initialise display
         self.lcd_init()
@@ -131,12 +128,12 @@ class LCD20x4(object):
         style=2 Centred
         style=3 Right justified
         '''
-        if style==1:
-            message = message.ljust(self.LCD_WIDTH," ")
-        elif style==2:
-            message = message.center(self.LCD_WIDTH," ")
-        elif style==3:
-            message = message.rjust(self.LCD_WIDTH," ")
+        if style == 1:
+            message = message.ljust(self.LCD_WIDTH, " ")
+        elif style == 2:
+            message = message.center(self.LCD_WIDTH, " ")
+        elif style == 3:
+            message = message.rjust(self.LCD_WIDTH, " ")
 
         for i in range(self.LCD_WIDTH):
             self.lcd_byte(ord(message[i]),self.LCD_CHR)
@@ -157,7 +154,7 @@ class LCD20x4(object):
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_1, self.LCD_CMD)
-        self.lcd_string(s,2)
+        self.lcd_string(s, 2)
 
     def line2_center(self, s):
         '''
@@ -165,7 +162,7 @@ class LCD20x4(object):
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_2, self.LCD_CMD)
-        self.lcd_string(s,2)
+        self.lcd_string(s, 2)
 
     def line3_center(self, s):
         '''
@@ -173,7 +170,7 @@ class LCD20x4(object):
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_3, self.LCD_CMD)
-        self.lcd_string(s,2)
+        self.lcd_string(s, 2)
 
     def line4_center(self, s):
         '''
@@ -181,10 +178,7 @@ class LCD20x4(object):
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_4, self.LCD_CMD)
-        self.lcd_string(s,2)
-
-    
-        
+        self.lcd_string(s, 2)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-# encoding:utf-8
+# -*- coding: utf-8 -*-
 
 import time
 from multiprocessing import Process
@@ -21,6 +21,11 @@ def RE_runner(q, name, pin_a, pin_b, button_pin):
 
 def RE_worker(q, encoder, name, switcher):
     nothing_happens = 0
+
+    depth_1 = 1000
+    depth_2 = depth_1 * 100
+    depth_3 = depth_2 * 100
+
     interval = 0
     total_delta = 0
     last_state = 0
@@ -39,12 +44,14 @@ def RE_worker(q, encoder, name, switcher):
             nothing_happens = 0
         else:
             nothing_happens += 1
+            if nothing_happens > depth_3 * 100:
+                nothing_happens = depth_3 - 1
 
         # sleeping
-        if nothing_happens == 1000:
+        if nothing_happens == depth_1:
             interval = 0.01
-        elif nothing_happens == 100000:
+        elif nothing_happens == depth_2:
             interval = 0.1
-        elif nothing_happens == 10000000:
+        elif nothing_happens == depth_3:
             interval = 1
         time.sleep(interval)
