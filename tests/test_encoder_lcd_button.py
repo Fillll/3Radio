@@ -1,9 +1,9 @@
 # encoding:utf-8
 
 
-from hardware.rotary import RotaryEncoder_proc
-from hardware.rotary.RotaryEncoder_proc import REException
-from hardware.lcd import LCD_proc
+from hardware.rotary import rotary_encoder_proc
+from hardware.rotary.rotary_encoder_proc import REException
+from hardware.lcd import lcd_proc
 from multiprocessing import Queue
 
 
@@ -32,19 +32,19 @@ def main():
     line_4 = Queue()
     encoders = Queue()
 
-    line_1.put({'text':'', 'style':'center'})
-    line_2.put({'text':'', 'style':'center'})
-    line_3.put({'text':'', 'style':'center'})
-    line_4.put({'text':'', 'style':'center'})
+    line_1.put({'text': '', 'style': 'center'})
+    line_2.put({'text': '', 'style': 'center'})
+    line_3.put({'text': '', 'style': 'center'})
+    line_4.put({'text': '', 'style': 'center'})
 
     print 'RE#1'
-    pe1 = RotaryEncoder_proc.RE_runner(encoders, 1, 8, 9, 7)
+    pe1 = rotary_encoder_proc.RE_runner(encoders, 1, 8, 9, 7)
     print 'RE#2'
-    pe2 = RotaryEncoder_proc.RE_runner(encoders, 2, 0, 2, 3)
+    pe2 = rotary_encoder_proc.RE_runner(encoders, 2, 0, 2, 3)
     print 'RE#3'
-    pe3 = RotaryEncoder_proc.RE_runner(encoders, 3, 12, 13, 14)
+    pe3 = rotary_encoder_proc.RE_runner(encoders, 3, 12, 13, 14)
     print 'LCD'
-    plcd = LCD_proc.LCD_runner(line_1, line_2, line_3, line_4)
+    plcd = lcd_proc.LCD_runner(line_1, line_2, line_3, line_4)
 
     sum_1 = sum_2 = sum_3 = 0
     state = {'button_1': False, 'button_2': False, 'button_3': False}
@@ -85,7 +85,6 @@ def main():
     pe2.terminate()
     pe3.terminate()
     plcd.terminate()
-
 
 
 if __name__ == '__main__':

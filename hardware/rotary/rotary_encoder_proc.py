@@ -1,10 +1,10 @@
 # encoding:utf-8
 
-
-import RotaryEncoder
-import Switch
 import time
 from multiprocessing import Process
+
+from rotary_encoder import RotaryEncoder
+from switch import Switch
 
 
 class REException(Exception):
@@ -12,8 +12,8 @@ class REException(Exception):
 
 
 def RE_runner(q, name, pin_a, pin_b, button_pin):
-    my_RE = RotaryEncoder.RotaryEncoder(pin_a, pin_b)
-    my_button = Switch.Switch(button_pin)
+    my_RE = RotaryEncoder(pin_a, pin_b)
+    my_button = Switch(button_pin)
 
     p = Process(target=RE_worker, args=(q, my_RE, name, my_button))
     p.start()

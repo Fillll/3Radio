@@ -5,11 +5,18 @@ from hardware.rotary import RotaryEncoder_proc
 from hardware.rotary.RotaryEncoder_proc import REException
 from hardware.lcd import LCD_proc
 from multiprocessing import Queue
+import RPi.GPIO
 
 import time
 
+DEBUG = True
+
 def on_startup():
-    time.sleep(1)
+    if DEBUG:
+        time.sleep(1)
+    else:
+        time.sleep(100)
+        RPi.GPIO.setwarnings(False)
 
     line_1 = Queue()
     line_2 = Queue()

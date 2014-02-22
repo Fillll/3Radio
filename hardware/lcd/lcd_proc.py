@@ -1,8 +1,9 @@
 # encoding:utf-8
 
-import LCD
 import time
 from multiprocessing import Process
+
+from lcd import LCD20x4
 
 
 class LCDException(Exception):
@@ -13,7 +14,7 @@ def LCD_runner(q1, q2, q3, q4):
     '''
     Run process for all 4 lines
     '''
-    my_lcd = LCD.LCD20x4(26, 24, 22, 18, 16, 12, 10)
+    my_lcd = LCD20x4(26, 24, 22, 18, 16, 12, 10)
 
     p = Process(target=LCD_worker, args=(q1, q2, q3, q4, my_lcd))
     p.start()
