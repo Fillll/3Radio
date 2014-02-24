@@ -2,24 +2,32 @@
 
 import time
 from multiprocessing import Process
+import zmq
 
 from rotary_encoder import RotaryEncoder
 from switch import Switch
+from hardware.device_controller_pb2 import DeviceControllerMessage, Encoder
 
 
 class REException(Exception):
     pass
 
 
-def RE_runner(q, name, pin_a, pin_b, button_pin):
+def RE_runner(port, name, pin_a, pin_b, button_pin):
     my_RE = RotaryEncoder(pin_a, pin_b)
     my_button = Switch(button_pin)
 
-    p = Process(target=RE_worker, args=(q, my_RE, name, my_button))
+    p = Process(target=RE_worker, args=(port, my_RE, name, my_button))
     p.start()
     return p
 
-def RE_worker(q, encoder, name, switcher):
+
+def RE_worker(port, encoder, name, switcher):
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.connect('tcp://localhost:%d' % port)
+    time.sleep(1)
+
     nothing_happens = 0
 
     depth_1 = 1000
@@ -34,12 +42,19 @@ def RE_worker(q, encoder, name, switcher):
         state = switcher.get_state()
         if (delta != 0) or (state != last_state):
             total_delta += delta
+            message = DeviceControllerMessage()
+            message.from_device = DeviceControllerMessage.RotaryEncoder
+            message.encoder_message.name = name
             if (total_delta % 4 == 0) and (total_delta != 0):
-                q.put({'rot': total_delta/4, 'name': name, 'dev': 're'})
+                message.encoder_message.action = Encoder.Rotation
+                message.encoder_message.snaps = total_delta / 4
+                socket.send(message.SerializeToString())
                 total_delta = 0
             if state != last_state:
                 last_state = state
-                q.put({'button': state, 'name': name, 'dev': 're'})
+                message.encoder_message.action = Encoder.Button
+                message.encoder_message.button_state = state
+                socket.send(message.SerializeToString())
             interval = 0.001
             nothing_happens = 0
         else:

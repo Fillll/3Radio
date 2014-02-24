@@ -1,0 +1,12 @@
+message Display
+{
+	optional string text = 1;
+
+	enum Style
+	{
+		left = 0;
+		center = 1;
+		right = 2;
+	}
+	optional Style style = 2;
+}

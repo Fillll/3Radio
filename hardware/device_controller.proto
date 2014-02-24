@@ -1,0 +1,33 @@
+message DeviceControllerMessage
+{
+	enum From
+	{
+		RotaryEncoder = 0;
+		WeatherTimeUpdater = 1;
+	}
+	optional From from_device = 1;
+
+	optional Encoder encoder_message = 2;
+	optional string weather_time = 3;
+}
+
+message Encoder
+{
+	optional int32 name = 1;
+
+	enum ActionType
+	{
+		Rotation = 0;
+		Button = 1;
+	}
+	optional ActionType action = 2;
+
+	enum ButtonState
+	{
+		up = 0;
+		down = 1;
+	}
+	optional ButtonState button_state = 3;
+
+	optional int32 snaps = 4;
+}

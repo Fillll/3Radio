@@ -148,15 +148,16 @@ class LCD20x4(object):
         self.lcd_byte(self.LCD_LINE_4, self.LCD_CMD)
         self.lcd_string(s4,2)
 
-    def line1_center(self, s):
+    def line1_1(self, s):
         '''
+        1 means center
         Print text on 1st line
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_1, self.LCD_CMD)
         self.lcd_string(s, 2)
 
-    def line2_center(self, s):
+    def line2_1(self, s):
         '''
         Print text on 2nd line
         For short string ( len(string) =< LCD_WIDTH )
@@ -164,7 +165,7 @@ class LCD20x4(object):
         self.lcd_byte(self.LCD_LINE_2, self.LCD_CMD)
         self.lcd_string(s, 2)
 
-    def line3_center(self, s):
+    def line3_1(self, s):
         '''
         Print text on 4rd line
         For short string ( len(string) =< LCD_WIDTH )
@@ -172,7 +173,7 @@ class LCD20x4(object):
         self.lcd_byte(self.LCD_LINE_3, self.LCD_CMD)
         self.lcd_string(s, 2)
 
-    def line4_center(self, s):
+    def line4_1(self, s):
         '''
         Print text on 4th line
         For short string ( len(string) =< LCD_WIDTH )
