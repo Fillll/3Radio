@@ -6,7 +6,7 @@ from time import strftime, sleep
 import pylibmc
 import zmq
 
-from hardware.device_controller_pb2 import DeviceControllerMessage
+from device_controller_pb2 import DeviceControllerMessage
 
 
 class TimeAndWeatherUpdater(object):
@@ -15,11 +15,6 @@ class TimeAndWeatherUpdater(object):
         self.mc = pylibmc.Client(['127.0.0.1'], binary=True,
                                  behaviors={'tcp_nodelay': True,
                                  'ketama': True})
-
-
-        r_c = self.mc['TNWU_reduced_connection']
-        authkey = self.mc['TNWU_authkey']
-        self.line_connection = r_c[0](r_c[1][0], r_c[1][1], r_c[1][2], authkey)
 
         # ZMQ init
         self.context = zmq.Context()
@@ -32,19 +27,16 @@ class TimeAndWeatherUpdater(object):
         weather_response = requests.get(url)
         weather_data = json.loads(weather_response.content)
         celsius = weather_data[u'main'][u'temp'] - 273.15
-        return '%s%sC' % (str(round(celsius, 1)), chr(223))
+        return str(round(celsius, 1))
 
     def get_time(self):
         return strftime('%H:%M')
 
-    def get_line(self, temp, time):
-        white_spaces = ' ' * (20 - len(time) - len(temp))
-        return '%s%s%s' % (temp, white_spaces, time)
-
-    def set_line(self, line):
+    def set_weather_time(self, weather, time):
         message = DeviceControllerMessage()
         message.from_device = DeviceControllerMessage.WeatherTimeUpdater
-        message.weather_time = line
+        message.weather = weather
+        message.time = time
         self.socket.send(message.SerializeToString())
 
     def work(self):
@@ -56,20 +48,20 @@ class TimeAndWeatherUpdater(object):
             # Update only time
             time = self.get_time()
             temp = self.mc['TNWU_last_temp']
-            line = self.get_line(temp, time)
-            self.set_line(line)
+            self.set_weather_time(temp, time)
 
             # Update weather
             try:
                 temp = self.get_temperature(self.mc['city'])
-            except:    
+            except:
                 sleep(1)
+                time = self.get_time()
+                self.set_weather_time(temp, time)
             else:
                 temp_success = True
 
             time = self.get_time()
-            line = self.get_line(temp, time)
-            self.set_line(line)
+            self.set_weather_time(temp, time)
 
         self.mc['TNWU_last_temp'] = temp
         self.mc['TNWU_running'] = False
@@ -79,5 +71,8 @@ if __name__ == '__main__':
     mc = pylibmc.Client(['127.0.0.1'], binary=True,
                         behaviors={'tcp_nodelay': True,
                         'ketama': True})
+    mc['TNWU_running'] = False
+    mc['TNWU_last_temp'] = '-666.666'
+    mc['city'] = 'Moscow,ru'
     t_n_w_updater = TimeAndWeatherUpdater(mc['DC_port'])
     t_n_w_updater.work()

@@ -12,3 +12,9 @@ class DisplayController(object):
         message.style = Display.center
         message.text = text
         self.lines[line_id].send(message.SerializeToString())
+
+    def weather_time(self, temperature, time):
+        # weather = '%s%sC' % (temperature, chr(223))
+        weather = '%s%sC' % (temperature, chr(123))
+        white_spaces = ' ' * (20 - len(time) - len(weather))
+        self.line_center(4, '%s%s%s' % (weather, white_spaces, time))

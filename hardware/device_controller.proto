@@ -8,7 +8,8 @@ message DeviceControllerMessage
 	optional From from_device = 1;
 
 	optional Encoder encoder_message = 2;
-	optional string weather_time = 3;
+	optional string weather = 3;
+	optional string time = 4;
 }
 
 message Encoder

@@ -5,7 +5,7 @@ from multiprocessing import Pipe
 import pylibmc
 
 from lcd.controller import DisplayController
-from device_controller_pb2 import DeviceControllerMessage
+from hardware.device_controller_pb2 import DeviceControllerMessage
 from device_controller_pb2 import Encoder
 from hardware.lcd.lcd_proc import LCD_runner
 from hardware.rotary.rotary_encoder_proc import RE_runner
@@ -20,6 +20,7 @@ class DeviceController(object):
         self.context = zmq.Context()
         self.recv_socket = self.context.socket(zmq.SUB)
         self.recv_socket.bind('tcp://*:%d' % recv_port)
+        self.recv_socket.setsockopt(zmq.SUBSCRIBE, '')
 
         # Display init
         recv_1, send_1 = Pipe(duplex=False)
@@ -64,18 +65,15 @@ class DeviceController(object):
                 if message.action == Encoder.Rotation:
                     self.state[encoder_id][Encoder.Rotation] += \
                                                         message.snaps
-                    self.lines[encoder_id].send
                 elif message.action == Encoder.Button:
                     self.state[encoder_id][Encoder.Button] = \
                                                         message.button_state
-            elif (message.form_device ==
+            elif (message.from_device ==
                         DeviceControllerMessage.WeatherTimeUpdater):
-                self.display.line_center(4, message.weather_time)
+                self.display.weather_time(message.weather, message.time)
 
             if self.stop_all():
                 break
-
-            print self.state
 
     def stop_all(self):
         if ((self.state[1][Encoder.Button] == Encoder.down) and
