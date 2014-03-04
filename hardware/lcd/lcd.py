@@ -1,11 +1,12 @@
-# encoding:utf-8
-
+# -*- coding: utf-8 -*-
 
 # Bad-quality fork from
 # http://www.raspberrypi-spy.co.uk/2012/08/20x4-lcd-module-control-using-python/
 
 import RPi.GPIO as GPIO
 import time
+
+from display_pb2 import Display
 
 
 class LCD20x4(object):
@@ -20,17 +21,17 @@ class LCD20x4(object):
         self.LCD_D5 = LCD_D5
         self.LCD_D6 = LCD_D6
         self.LCD_D7 = LCD_D7
-        self.LED_ON = LED_ON # Think on this pin! Do you need it?
+        self.LED_ON = LED_ON  # Think on this pin! Do you need it?
 
         # Define some device constants
-        self.LCD_WIDTH = 20 # Maximum characters per line
+        self.LCD_WIDTH = 20  # Maximum characters per line
         self.LCD_CHR = True
         self.LCD_CMD = False
 
-        self.LCD_LINE_1 = 0x80 # LCD RAM address for the 1st line
-        self.LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
-        self.LCD_LINE_3 = 0x94 # LCD RAM address for the 3rd line
-        self.LCD_LINE_4 = 0xD4 # LCD RAM address for the 4th line 
+        self.LCD_LINE_1 = 0x80  # LCD RAM address for the 1st line
+        self.LCD_LINE_2 = 0xC0  # LCD RAM address for the 2nd line
+        self.LCD_LINE_3 = 0x94  # LCD RAM address for the 3rd line
+        self.LCD_LINE_4 = 0xD4  # LCD RAM address for the 4th line 
 
         # Timing constants
         self.E_PULSE = 0.00005
@@ -74,7 +75,7 @@ class LCD20x4(object):
         Send byte to data pins
         bits = data
         mode = True    for character
-                       False for command
+               False   for command
         '''
 
         GPIO.output(self.LCD_RS, mode) # RS
@@ -134,9 +135,22 @@ class LCD20x4(object):
             message = message.center(self.LCD_WIDTH, " ")
         elif style == 3:
             message = message.rjust(self.LCD_WIDTH, " ")
+        elif style == Display.temp_and_time:
+            first, second = message.split("'")
+            for c in first:
+                self.lcd_byte(ord(c), self.LCD_CHR)
+            self.lcd_byte(223, self.LCD_CHR)
+            for c in second:
+                self.lcd_byte(ord(c), self.LCD_CHR)
+            return
 
         for i in range(self.LCD_WIDTH):
-            self.lcd_byte(ord(message[i]),self.LCD_CHR)
+            self.lcd_byte(ord(message[i]), self.LCD_CHR)
+
+    def send_bytes(self, bytes):
+        counter = min(len(bytes), self.LCD_WIDTH)
+        for i in range(counter):
+            self.lcd_byte(bytes[i], self.LCD_CHR)
 
     def center_text(self, s1, s2, s3, s4):
         self.lcd_byte(self.LCD_LINE_1, self.LCD_CMD)
@@ -148,16 +162,16 @@ class LCD20x4(object):
         self.lcd_byte(self.LCD_LINE_4, self.LCD_CMD)
         self.lcd_string(s4,2)
 
-    def line1_1(self, s):
+    def line1_2(self, s):
         '''
-        1 means center
+        2 means center
         Print text on 1st line
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_1, self.LCD_CMD)
         self.lcd_string(s, 2)
 
-    def line2_1(self, s):
+    def line2_2(self, s):
         '''
         Print text on 2nd line
         For short string ( len(string) =< LCD_WIDTH )
@@ -165,7 +179,7 @@ class LCD20x4(object):
         self.lcd_byte(self.LCD_LINE_2, self.LCD_CMD)
         self.lcd_string(s, 2)
 
-    def line3_1(self, s):
+    def line3_2(self, s):
         '''
         Print text on 4rd line
         For short string ( len(string) =< LCD_WIDTH )
@@ -173,13 +187,21 @@ class LCD20x4(object):
         self.lcd_byte(self.LCD_LINE_3, self.LCD_CMD)
         self.lcd_string(s, 2)
 
-    def line4_1(self, s):
+    def line4_2(self, s):
         '''
         Print text on 4th line
         For short string ( len(string) =< LCD_WIDTH )
         '''
         self.lcd_byte(self.LCD_LINE_4, self.LCD_CMD)
         self.lcd_string(s, 2)
+
+    def line4_0(self, s):
+        '''
+        Print text on 4th line
+        For short string ( len(string) =< LCD_WIDTH )
+        '''
+        self.lcd_byte(self.LCD_LINE_4, self.LCD_CMD)
+        self.lcd_string(s, Display.temp_and_time)
 
 
 if __name__ == '__main__':

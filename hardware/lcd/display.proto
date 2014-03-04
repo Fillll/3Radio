@@ -4,9 +4,11 @@ message Display
 
 	enum Style
 	{
-		left = 0;
-		center = 1;
-		right = 2;
+		temp_and_time = 0;
+		left = 1;
+		center = 2;
+		right = 3;
 	}
 	optional Style style = 2;
 }
+

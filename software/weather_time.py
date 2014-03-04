@@ -72,7 +72,6 @@ if __name__ == '__main__':
                         behaviors={'tcp_nodelay': True,
                         'ketama': True})
     mc['TNWU_running'] = False
-    mc['TNWU_last_temp'] = '-666.666'
     mc['city'] = 'Moscow,ru'
     t_n_w_updater = TimeAndWeatherUpdater(mc['DC_port'])
     t_n_w_updater.work()

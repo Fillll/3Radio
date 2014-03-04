@@ -22,23 +22,23 @@ def LCD_runner(q1, q2, q3, q4):
     return p
 
 
-def get_text_from(q, counter):
-    if not q.poll():
-        return None, counter
+def get_messages(pipes, counters):
+    messages = [None, None, None, None]
+    for each in range(4):
+        while pipes[each].poll():
+            message = Display()
+            message.ParseFromString(pipes[each].recv())
+            messages[each] = message
+            counters[each] = 0
+    return messages, counters
 
-    message = None
-    while q.poll():
-        message = Display()
-        message.ParseFromString(q.recv())
-        
-    return message, 0
 
-
-def change_text_and_style(message, text, style):
-    if message is None:
-        return text, style
-    else:
-        return str(message.text), message.style
+def change_text(messages, texts, styles):
+    for each in range(4):
+        if messages[each] is not None:
+            texts[each] = messages[each].text
+            styles[each] = messages[each].style
+    return texts, styles
 
 
 def print_line(text, lcd, line_style, counter, white):
@@ -51,44 +51,44 @@ def print_line(text, lcd, line_style, counter, white):
         to_print = text[counter:]
         counter += 1
 
-    getattr(lcd, line_style)(to_print)
+    lcd.lcd_string(to_print, line_style)
 
     return counter
+
+def print_lines(texts, styles, lcd, counters, white):
+    for each in range(4):
+        if len(texts[each]) <= lcd.LCD_WIDTH:
+            to_print = texts[each]
+        else:
+            text = '%s%s%s' % (white, texts[each], white)
+            if counters[each] == len(texts[each]) - lcd.LCD_WIDTH + 1:
+                counters[each] = 1
+            to_print = text[counters[each]:]
+            counters[each] += 1
+        getattr(lcd, 'line%d_%d' % (each + 1, styles[each]))(to_print)
+    return counters
 
 
 def LCD_worker(q1, q2, q3, q4, lcd, white=5, delay=0.5):
     """
     """
+    in_pipes = [q1, q2, q3, q4]
     white = ' ' * white  # Whiting length
-    counter_1 = counter_2 = counter_3 = counter_4 = 0
-    text_1 = text_2 = text_3 = text_4 = '0'
-    style_1 = style_2 = style_3 = style_4 = Display.center
+    counters = [0, 0, 0, 0]
+    texts = ['1', '2', '3', '4']
+    styles = [1, 1, 1, 1]
 
     while True:
-        new_message_1, counter_1 = get_text_from(q1, counter_1)
-        new_message_2, counter_2 = get_text_from(q2, counter_2)
-        new_message_3, counter_3 = get_text_from(q3, counter_3)
-        new_message_4, counter_4 = get_text_from(q4, counter_4)
+        new_messages, counters = get_messages(in_pipes, counters)
 
         # if isinstance(new_message_4, dict):
         #     if 'stop' in new_message_4:
         #         break
 
-        text_1, style_1 = change_text_and_style(new_message_1, text_1, style_1)
-        text_2, style_2 = change_text_and_style(new_message_2, text_2, style_2)
-        text_3, style_3 = change_text_and_style(new_message_3, text_3, style_3)
-        text_4, style_4 = change_text_and_style(new_message_4, text_4, style_4)
-
-        line_style_1 = 'line1_%d' % style_1
-        line_style_2 = 'line2_%d' % style_2
-        line_style_3 = 'line3_%d' % style_3
-        line_style_4 = 'line4_%d' % style_4
+        texts, styles = change_text(new_messages, texts, styles)
 
         while True:
-            counter_1 = print_line(text_1, lcd, line_style_1, counter_1, white)
-            counter_2 = print_line(text_2, lcd, line_style_2, counter_2, white)
-            counter_3 = print_line(text_3, lcd, line_style_3, counter_3, white)
-            counter_4 = print_line(text_4, lcd, line_style_4, counter_4, white)
+            counters = print_lines(texts, styles, lcd, counters, white)
 
             if (q1.poll()) or (q2.poll()) or (q3.poll()) or (q4.poll()):
                 break

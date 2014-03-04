@@ -3,9 +3,11 @@
 import zmq
 from multiprocessing import Pipe
 import pylibmc
+import time
+import RPi.GPIO as GPIO
 
 from lcd.controller import DisplayController
-from hardware.device_controller_pb2 import DeviceControllerMessage
+from hardware.device_controller_pb2 import DeviceControllerMessage as DCM
 from device_controller_pb2 import Encoder
 from hardware.lcd.lcd_proc import LCD_runner
 from hardware.rotary.rotary_encoder_proc import RE_runner
@@ -15,7 +17,22 @@ class DeviceController(object):
     '''
     DeviceController
     '''
-    def __init__(self, recv_port):
+    def __init__(self, recv_port, debug=False):
+        # Debug init
+        mc = pylibmc.Client(['127.0.0.1'], binary=True,
+                            behaviors={'tcp_nodelay': True,
+                            'ketama': True})
+        try:
+            self.debug = mc['debug']
+        except:
+            self.debug = debug
+        if not self.debug:
+            time.sleep(3 * 60)
+            GPIO.setwarnings(False)
+
+        # Temperature init
+        mc['TNWU_last_temp'] = '-666.666'
+
         # ZMQ init
         self.context = zmq.Context()
         self.recv_socket = self.context.socket(zmq.SUB)
@@ -55,11 +72,10 @@ class DeviceController(object):
 
     def work(self):
         while True:
-            message = DeviceControllerMessage()
+            message = DCM()
             message.ParseFromString(self.recv_socket.recv())
 
-            if (message.from_device ==
-                        DeviceControllerMessage.RotaryEncoder):
+            if message.from_device == DCM.RotaryEncoder:
                 message = message.encoder_message
                 encoder_id = message.name
                 if message.action == Encoder.Rotation:
@@ -68,9 +84,10 @@ class DeviceController(object):
                 elif message.action == Encoder.Button:
                     self.state[encoder_id][Encoder.Button] = \
                                                         message.button_state
-            elif (message.from_device ==
-                        DeviceControllerMessage.WeatherTimeUpdater):
+            elif message.from_device == DCM.WeatherTimeUpdater:
                 self.display.weather_time(message.weather, message.time)
+            elif message.from_device == DCM.JustPrintIt:
+                self.display.line_center(message.line_number, message.text)
 
             if self.stop_all():
                 break
